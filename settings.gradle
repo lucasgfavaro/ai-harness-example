@@ -1,0 +1,4 @@
+rootProject.name = 'ai-harness-example'
+
+include 'home-assistant-api'
+include 'home-agent-harness'

@@ -1,0 +1,27 @@
+services:
+  home-assistant-api:
+    build:
+      context: .
+      dockerfile: home-assistant-api/Dockerfile
+    ports:
+      - "${HOME_API_PORT:-8080}:8080"
+    healthcheck:
+      test: ["CMD", "bash", "-c", "exec 3<>/dev/tcp/127.0.0.1/8080"]
+      interval: 5s
+      timeout: 2s
+      retries: 20
+      start_period: 10s
+
+  home-agent-harness:
+    build:
+      context: .
+      dockerfile: home-agent-harness/Dockerfile
+    depends_on:
+      home-assistant-api:
+        condition: service_healthy
+    environment:
+      HOME_LIGHT_BASE_URL: http://home-assistant-api:8080/api/light
+      OPENAI_API_KEY: "${OPENAI_API_KEY:-}"
+      OPENAI_MODEL: "${OPENAI_MODEL:-gpt-4.1-mini}"
+    ports:
+      - "${HARNESS_PORT:-8081}:8081"
