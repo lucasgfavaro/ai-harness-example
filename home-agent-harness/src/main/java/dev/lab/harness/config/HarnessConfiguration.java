@@ -4,7 +4,7 @@ import dev.lab.harness.agent.AgentService;
 import dev.lab.harness.agent.ModelGateway;
 import dev.lab.harness.agent.OpenAiModelGateway;
 import dev.lab.harness.agent.SkillLoader;
-import dev.lab.harness.tool.HttpLightTools;
+import dev.lab.harness.tool.HttpHomeTools;
 import dev.lab.harness.tool.ToolExecutor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -19,14 +19,14 @@ public class HarnessConfiguration {
 	}
 
 	@Bean
-	ToolExecutor httpLightTools(@Value("${home.light.base-url}") String baseUrl) {
-		return new HttpLightTools(baseUrl);
+	ToolExecutor httpHomeTools(@Value("${home.api.base-url}") String baseUrl) {
+		return new HttpHomeTools(baseUrl);
 	}
 
 	@Bean
 	AgentService agentService(ModelGateway model, ToolExecutor tools,
 			@Value("${agent.max-turns}") int maxTurns) {
-		String skill = SkillLoader.load("skills/garden-light.md");
+		String skill = SkillLoader.load("skills/home-assistant.md");
 		return new AgentService(model, tools, skill, maxTurns);
 	}
 }

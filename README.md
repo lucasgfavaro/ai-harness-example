@@ -27,6 +27,22 @@ Copy-Item .env.example .env
 notepad .env
 ```
 
+> **Importante:** la clave debe quedar en el archivo `.env` de la raiz del repo. Docker Compose la toma de ahi automaticamente sin que haya que exportarla en la sesion de PowerShell.
+>
+> Si ademas tenes `OPENAI_API_KEY` definida como variable de entorno del sistema/usuario en Windows (por ejemplo con `$env:OPENAI_API_KEY = '...'` o `setx OPENAI_API_KEY ...`), esa variable tiene **prioridad sobre el `.env`** y Compose la va a usar en su lugar, aunque el `.env` tenga una clave distinta o mas nueva. Esto puede causar errores `401 Unauthorized` con una clave que en teoria es correcta. Para evitarlo, verifica y limpia cualquier variable persistida:
+>
+> ```powershell
+> [Environment]::GetEnvironmentVariable('OPENAI_API_KEY', 'User')
+> [Environment]::SetEnvironmentVariable('OPENAI_API_KEY', $null, 'User')
+> Remove-Item Env:\OPENAI_API_KEY -ErrorAction SilentlyContinue
+> ```
+>
+> Despues de limpiarla, recrea el contenedor para que tome el valor del `.env`:
+>
+> ```powershell
+> docker compose up -d --force-recreate home-agent-harness
+> ```
+
 Construye y levanta ambos servicios:
 
 ```powershell
@@ -102,10 +118,13 @@ Cada Dockerfile usa un build de dos etapas: compila el modulo con Java 21 y copi
 
 | Variable | Uso | Valor por defecto |
 |---|---|---|
-| `OPENAI_API_KEY` | Flujo real del harness | vacio |
+| `OPENAI_API_KEY` | Flujo real del harness (se define en `.env`) | vacio |
 | `OPENAI_MODEL` | Modelo de OpenAI | `gpt-4.1-mini` |
 | `HOME_API_PORT` | Puerto publicado de la API | `8080` |
 | `HARNESS_PORT` | Puerto publicado del harness | `8081` |
 | `HOME_LIGHT_BASE_URL` | URL interna usada por la tool | configurada por Compose |
 
 No guardes `.env` ni claves en Git. `.env.example` contiene solamente valores de ejemplo.
+
+> Recorda: una variable de entorno `OPENAI_API_KEY` seteada a nivel de usuario/sistema en Windows tiene prioridad sobre el `.env` para Docker Compose. Si cambias la clave y segue fallando con `401`, revisa que no haya una variable persistida pisando el valor del `.env`.
+

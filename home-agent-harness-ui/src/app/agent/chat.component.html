@@ -1,0 +1,53 @@
+<div class="chat">
+  <header class="chat__header">
+    <h1>Home Agent Harness</h1>
+    <label class="chat__dry-run">
+      <input type="checkbox" [(ngModel)]="dryRun" />
+      Dry run (sin LLM ni red)
+    </label>
+  </header>
+
+  <div class="chat__messages">
+    @for (message of messages(); track $index) {
+      <div class="chat__message" [class.chat__message--user]="message.role === 'user'"
+           [class.chat__message--agent]="message.role === 'agent'">
+        <span class="chat__author">{{ message.role === 'user' ? 'Vos' : 'Agente' }}</span>
+        <p class="chat__text">{{ message.text }}</p>
+        @if (message.steps?.length) {
+          <details class="chat__steps">
+            <summary>Ver pasos del loop ({{ message.steps?.length }})</summary>
+            <ol>
+              @for (step of message.steps; track $index) {
+                <li>{{ step }}</li>
+              }
+            </ol>
+          </details>
+        }
+      </div>
+    }
+
+    @if (loading()) {
+      <div class="chat__message chat__message--agent chat__message--loading">
+        <span class="chat__author">Agente</span>
+        <p class="chat__text">Pensando…</p>
+      </div>
+    }
+
+    @if (error()) {
+      <div class="chat__error">{{ error() }}</div>
+    }
+  </div>
+
+  <form class="chat__form" (ngSubmit)="send()">
+    <textarea
+      class="chat__input"
+      rows="2"
+      placeholder="Escribí un pedido, por ejemplo: apagá la luz del jardín"
+      [(ngModel)]="input"
+      name="input"
+      (keydown)="onKeydown($event)"
+    ></textarea>
+    <button class="chat__send" type="submit" [disabled]="loading() || !input.trim()">Enviar</button>
+  </form>
+</div>
+

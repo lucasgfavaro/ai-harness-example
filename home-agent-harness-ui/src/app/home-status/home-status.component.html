@@ -1,0 +1,58 @@
+<div class="status">
+  <header class="status__header">
+    <h2>Estado del hogar</h2>
+    <button class="status__refresh" type="button" (click)="refresh()" [disabled]="loading()">
+      {{ loading() ? 'Actualizando…' : 'Actualizar' }}
+    </button>
+  </header>
+
+  @if (error()) {
+    <div class="status__error">{{ error() }}</div>
+  }
+
+  @if (summary(); as home) {
+    <div class="status__grid">
+      <div class="status__card">
+        <span class="status__icon">💡</span>
+        <div class="status__info">
+          <span class="status__label">Luz del jardín</span>
+          <span class="status__value" [class.status__value--on]="home.gardenLight.on">
+            {{ home.gardenLight.on ? 'Encendida' : 'Apagada' }}
+          </span>
+        </div>
+      </div>
+
+      <div class="status__card">
+        <span class="status__icon">🪟</span>
+        <div class="status__info">
+          <span class="status__label">Persianas</span>
+          <span class="status__value">{{ home.blinds.positionPercent }}% abiertas</span>
+        </div>
+      </div>
+
+      <div class="status__card">
+        <span class="status__icon">🔒</span>
+        <div class="status__info">
+          <span class="status__label">Cerradura</span>
+          <span class="status__value" [class.status__value--on]="home.lock.locked">
+            {{ home.lock.locked ? 'Bloqueada' : 'Desbloqueada' }}
+          </span>
+        </div>
+      </div>
+
+      <div class="status__card">
+        <span class="status__icon">🌡️</span>
+        <div class="status__info">
+          <span class="status__label">Termostato</span>
+          <span class="status__value">
+            {{ home.thermostat.currentTemperature }}°C → {{ home.thermostat.targetTemperature }}°C
+            ({{ home.thermostat.mode }})
+          </span>
+        </div>
+      </div>
+    </div>
+  } @else if (!loading() && !error()) {
+    <p class="status__empty">Sin datos todavía.</p>
+  }
+</div>
+

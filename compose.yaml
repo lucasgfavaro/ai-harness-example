@@ -20,8 +20,18 @@ services:
       home-assistant-api:
         condition: service_healthy
     environment:
-      HOME_LIGHT_BASE_URL: http://home-assistant-api:8080/api/light
+      HOME_API_BASE_URL: http://home-assistant-api:8080/api
       OPENAI_API_KEY: "${OPENAI_API_KEY:-}"
       OPENAI_MODEL: "${OPENAI_MODEL:-gpt-4.1-mini}"
     ports:
       - "${HARNESS_PORT:-8081}:8081"
+
+  home-agent-harness-ui:
+    build:
+      context: .
+      dockerfile: home-agent-harness-ui/Dockerfile
+    depends_on:
+      - home-agent-harness
+    ports:
+      - "${HARNESS_UI_PORT:-4200}:4200"
+

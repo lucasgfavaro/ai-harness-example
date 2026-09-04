@@ -1,6 +1,6 @@
 package dev.lab.harness.agent;
 
-import dev.lab.harness.tool.DryRunLightTools;
+import dev.lab.harness.tool.DryRunHomeTools;
 import dev.lab.harness.tool.ToolExecutor;
 
 public final class AgentService {
@@ -19,7 +19,7 @@ public final class AgentService {
 
 	public AgentResult run(String request, boolean dryRun) {
 		if (dryRun) {
-			return new AgentLoop(new DryRunModelGateway(), new DryRunLightTools(), skill, maxTurns, true).run(request);
+			return new AgentLoop(new DryRunModelGateway(), new DryRunHomeTools(), skill, maxTurns, true).run(request);
 		}
 		return new AgentLoop(openAi, httpTools, skill, maxTurns, false).run(request);
 	}

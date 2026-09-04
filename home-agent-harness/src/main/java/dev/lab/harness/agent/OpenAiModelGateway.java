@@ -83,20 +83,41 @@ public final class OpenAiModelGateway implements ModelGateway {
 
 	private List<FunctionTool> tools() {
 		return List.of(
-				tool("get_light_state", "Lee si la luz del jardin esta encendida o apagada."),
-				tool("turn_light_on", "Enciende la luz del jardin."),
-				tool("turn_light_off", "Apaga la luz del jardin."));
+				tool("get_light_state", "Lee si la luz del jardin esta encendida o apagada.", Map.of(), List.of()),
+				tool("turn_light_on", "Enciende la luz del jardin.", Map.of(), List.of()),
+				tool("turn_light_off", "Apaga la luz del jardin.", Map.of(), List.of()),
+
+				tool("get_blinds_state", "Lee la posicion actual de las persianas en porcentaje.", Map.of(), List.of()),
+				tool("open_blinds", "Abre completamente las persianas (100%).", Map.of(), List.of()),
+				tool("close_blinds", "Cierra completamente las persianas (0%).", Map.of(), List.of()),
+				tool("set_blinds_position", "Establece la posicion de las persianas entre 0 y 100.",
+						Map.of("percent", Map.of("type", "integer", "description", "Porcentaje de apertura, 0 a 100")),
+						List.of("percent")),
+
+				tool("get_lock_state", "Lee si la puerta esta bloqueada o desbloqueada.", Map.of(), List.of()),
+				tool("lock_door", "Bloquea la puerta principal.", Map.of(), List.of()),
+				tool("unlock_door", "Desbloquea la puerta principal.", Map.of(), List.of()),
+
+				tool("get_thermostat_state", "Lee temperatura actual, objetivo y modo del termostato.", Map.of(), List.of()),
+				tool("set_thermostat_target", "Establece la temperatura objetivo en grados Celsius.",
+						Map.of("temperature", Map.of("type", "number", "description", "Temperatura objetivo en grados Celsius")),
+						List.of("temperature")),
+				tool("set_thermostat_mode", "Cambia el modo de operacion del termostato.",
+						Map.of("mode", Map.of("type", "string", "description", "Modo: OFF, HEATING, COOLING o IDLE")),
+						List.of("mode")),
+
+				tool("get_home_summary", "Devuelve el estado consolidado de todos los dispositivos del hogar.", Map.of(), List.of()));
 	}
 
-	private FunctionTool tool(String name, String description) {
+	private FunctionTool tool(String name, String description, Map<String, Object> properties, List<String> required) {
 		return FunctionTool.builder()
 				.name(name)
 				.description(description)
-				.strict(true)
+				.strict(false)
 				.parameters(FunctionTool.Parameters.builder()
 						.putAdditionalProperty("type", JsonValue.from("object"))
-						.putAdditionalProperty("properties", JsonValue.from(Map.of()))
-						.putAdditionalProperty("required", JsonValue.from(List.of()))
+						.putAdditionalProperty("properties", JsonValue.from(properties))
+						.putAdditionalProperty("required", JsonValue.from(required))
 						.putAdditionalProperty("additionalProperties", JsonValue.from(false))
 						.build())
 				.build();
