@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/home")
-@Tag(name = "Resumen del hogar", description = "Estado consolidado de todos los dispositivos en una sola llamada")
+@Tag(name = "Home Summary", description = "Consolidated state of every device in a single call")
 public class HomeController {
 
 	private final GardenLight light;
@@ -28,7 +28,7 @@ public class HomeController {
 	}
 
 	@GetMapping("/summary")
-	@Operation(summary = "Resumen completo", description = "Devuelve el estado actual de la luz, persianas, cerradura y termostato")
+	@Operation(summary = "Full summary", description = "Returns the current state of the light, blinds, lock, and thermostat")
 	public HomeSummary summary() {
 		return new HomeSummary(
 				light.status(),

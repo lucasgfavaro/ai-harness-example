@@ -10,7 +10,7 @@ export interface LockState {
   locked: boolean;
 }
 
-export type ThermostatMode = 'HEAT' | 'COOL' | 'OFF';
+export type ThermostatMode = 'OFF' | 'HEATING' | 'COOLING' | 'IDLE';
 
 export interface ThermostatState {
   currentTemperature: number;

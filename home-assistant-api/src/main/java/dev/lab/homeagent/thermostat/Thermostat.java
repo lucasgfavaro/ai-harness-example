@@ -26,7 +26,7 @@ public class Thermostat {
 		return status();
 	}
 
-	// Simula una lectura de temperatura actual
+	// Simulates a current temperature reading
 	public ThermostatState updateCurrentTemperature(double temperature) {
 		currentTemperature.set(temperature);
 		updateMode();

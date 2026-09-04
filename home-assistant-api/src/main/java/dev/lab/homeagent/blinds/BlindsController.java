@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/blinds")
-@Tag(name = "Persianas", description = "Controla la posición de las persianas (0=cerradas, 100=abiertas)")
+@Tag(name = "Blinds", description = "Controls the blinds position (0=closed, 100=open)")
 public class BlindsController {
 
 	private final Blinds blinds;
@@ -20,25 +20,25 @@ public class BlindsController {
 	}
 
 	@GetMapping
-	@Operation(summary = "Estado actual", description = "Devuelve la posición actual de las persianas en porcentaje")
+	@Operation(summary = "Current state", description = "Returns the current blinds position as a percentage")
 	public BlindsState status() {
 		return blinds.status();
 	}
 
 	@PostMapping("/open")
-	@Operation(summary = "Abrir completamente", description = "Sube las persianas al 100%")
+	@Operation(summary = "Open fully", description = "Raises the blinds to 100%")
 	public BlindsState open() {
 		return blinds.open();
 	}
 
 	@PostMapping("/close")
-	@Operation(summary = "Cerrar completamente", description = "Baja las persianas al 0%")
+	@Operation(summary = "Close fully", description = "Lowers the blinds to 0%")
 	public BlindsState close() {
 		return blinds.close();
 	}
 
 	@PostMapping("/position")
-	@Operation(summary = "Fijar posición", description = "Establece la posición de las persianas entre 0 y 100")
+	@Operation(summary = "Set position", description = "Sets the blinds position between 0 and 100")
 	public BlindsState setPosition(@RequestParam int percent) {
 		return blinds.setPosition(percent);
 	}

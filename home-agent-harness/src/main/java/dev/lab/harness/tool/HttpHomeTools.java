@@ -7,7 +7,7 @@ import dev.lab.harness.agent.ToolCall;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientException;
 
-/** Tools reales: HTTP Java hacia el simulador Spring Boot de la casa, para todos los dispositivos. */
+/** Real tools: Java HTTP calls to the Spring Boot home simulator, for every device. */
 public final class HttpHomeTools implements ToolExecutor {
 
 	private static final ObjectMapper MAPPER = new ObjectMapper();
@@ -57,7 +57,7 @@ public final class HttpHomeTools implements ToolExecutor {
 
 				case "get_home_summary" -> client.get().uri("/home/summary").retrieve().body(String.class);
 
-				default -> throw new IllegalArgumentException("Tool desconocida: " + call.name());
+				default -> throw new IllegalArgumentException("Unknown tool: " + call.name());
 			};
 		} catch (RestClientException | IllegalArgumentException exception) {
 			return "{\"ok\":false,\"error\":\"" + safe(exception.getMessage()) + "\"}";
@@ -84,18 +84,18 @@ public final class HttpHomeTools implements ToolExecutor {
 
 	private static String param(ToolCall call, String key) {
 		String args = call.arguments();
-		if (args == null || args.isBlank()) throw new IllegalArgumentException("Falta parámetro: " + key);
+		if (args == null || args.isBlank()) throw new IllegalArgumentException("Missing parameter: " + key);
 		try {
 			JsonNode node = MAPPER.readTree(args).get(key);
-			if (node == null) throw new IllegalArgumentException("Falta parámetro: " + key);
+			if (node == null) throw new IllegalArgumentException("Missing parameter: " + key);
 			return node.asText();
 		} catch (JsonProcessingException e) {
-			throw new IllegalArgumentException("JSON inválido: " + e.getMessage());
+			throw new IllegalArgumentException("Invalid JSON: " + e.getMessage());
 		}
 	}
 
 	private String safe(String message) {
-		return message == null ? "error sin detalle" : message.replace("\\", "\\\\").replace("\"", "\\\"");
+		return message == null ? "error with no detail" : message.replace("\\", "\\\\").replace("\"", "\\\"");
 	}
 
 	private record LightState(boolean on) {}

@@ -3,7 +3,7 @@ package dev.lab.harness.agent;
 import java.util.List;
 import java.util.Locale;
 
-/** Regla determinista de demostracion. No es una LLM y no llama a OpenAI. */
+/** Deterministic demo rule. It is not an LLM and does not call OpenAI. */
 public final class DryRunModelGateway implements ModelGateway {
 
 	@Override

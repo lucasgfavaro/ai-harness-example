@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.lab.harness.agent.ToolCall;
 
-/** Simula todos los dispositivos en memoria, sin HTTP. Útil para tests y dry-run. */
+/** Simulates every device in memory, without HTTP. Useful for tests and dry-run. */
 public final class DryRunHomeTools implements ToolExecutor {
 
 	private static final ObjectMapper MAPPER = new ObjectMapper();
@@ -49,7 +49,7 @@ public final class DryRunHomeTools implements ToolExecutor {
 
 			case "get_home_summary" -> summaryJson();
 
-			default -> throw new IllegalArgumentException("Tool dry-run desconocida: " + call.name());
+			default -> throw new IllegalArgumentException("Unknown dry-run tool: " + call.name());
 		};
 	}
 
@@ -72,13 +72,13 @@ public final class DryRunHomeTools implements ToolExecutor {
 
 	private static String param(ToolCall call, String key) {
 		String args = call.arguments();
-		if (args == null || args.isBlank()) throw new IllegalArgumentException("Falta parámetro: " + key);
+		if (args == null || args.isBlank()) throw new IllegalArgumentException("Missing parameter: " + key);
 		try {
 			JsonNode node = MAPPER.readTree(args).get(key);
-			if (node == null) throw new IllegalArgumentException("Falta parámetro: " + key);
+			if (node == null) throw new IllegalArgumentException("Missing parameter: " + key);
 			return node.asText();
 		} catch (JsonProcessingException e) {
-			throw new IllegalArgumentException("JSON inválido: " + e.getMessage());
+			throw new IllegalArgumentException("Invalid JSON: " + e.getMessage());
 		}
 	}
 }

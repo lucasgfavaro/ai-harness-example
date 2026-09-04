@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-/** Adaptador del SDK oficial de OpenAI. El runtime no depende de tipos del SDK. */
+/** Adapter for the official OpenAI SDK. The runtime does not depend on SDK types. */
 public final class OpenAiModelGateway implements ModelGateway {
 
 	private final String model;
@@ -73,7 +73,7 @@ public final class OpenAiModelGateway implements ModelGateway {
 		if (client == null) {
 			synchronized (this) {
 				if (client == null) {
-					// fromEnv lee OPENAI_API_KEY; nunca hay secretos en el repositorio.
+					// fromEnv reads OPENAI_API_KEY; there are never secrets in the repository.
 					client = OpenAIOkHttpClient.fromEnv();
 				}
 			}
@@ -83,30 +83,30 @@ public final class OpenAiModelGateway implements ModelGateway {
 
 	private List<FunctionTool> tools() {
 		return List.of(
-				tool("get_light_state", "Lee si la luz del jardin esta encendida o apagada.", Map.of(), List.of()),
-				tool("turn_light_on", "Enciende la luz del jardin.", Map.of(), List.of()),
-				tool("turn_light_off", "Apaga la luz del jardin.", Map.of(), List.of()),
+				tool("get_light_state", "Reads whether the garden light is on or off.", Map.of(), List.of()),
+				tool("turn_light_on", "Turns on the garden light.", Map.of(), List.of()),
+				tool("turn_light_off", "Turns off the garden light.", Map.of(), List.of()),
 
-				tool("get_blinds_state", "Lee la posicion actual de las persianas en porcentaje.", Map.of(), List.of()),
-				tool("open_blinds", "Abre completamente las persianas (100%).", Map.of(), List.of()),
-				tool("close_blinds", "Cierra completamente las persianas (0%).", Map.of(), List.of()),
-				tool("set_blinds_position", "Establece la posicion de las persianas entre 0 y 100.",
-						Map.of("percent", Map.of("type", "integer", "description", "Porcentaje de apertura, 0 a 100")),
+				tool("get_blinds_state", "Reads the current blinds position as a percentage.", Map.of(), List.of()),
+				tool("open_blinds", "Fully opens the blinds (100%).", Map.of(), List.of()),
+				tool("close_blinds", "Fully closes the blinds (0%).", Map.of(), List.of()),
+				tool("set_blinds_position", "Sets the blinds position between 0 and 100.",
+						Map.of("percent", Map.of("type", "integer", "description", "Opening percentage, 0 to 100")),
 						List.of("percent")),
 
-				tool("get_lock_state", "Lee si la puerta esta bloqueada o desbloqueada.", Map.of(), List.of()),
-				tool("lock_door", "Bloquea la puerta principal.", Map.of(), List.of()),
-				tool("unlock_door", "Desbloquea la puerta principal.", Map.of(), List.of()),
+				tool("get_lock_state", "Reads whether the door is locked or unlocked.", Map.of(), List.of()),
+				tool("lock_door", "Locks the front door.", Map.of(), List.of()),
+				tool("unlock_door", "Unlocks the front door.", Map.of(), List.of()),
 
-				tool("get_thermostat_state", "Lee temperatura actual, objetivo y modo del termostato.", Map.of(), List.of()),
-				tool("set_thermostat_target", "Establece la temperatura objetivo en grados Celsius.",
-						Map.of("temperature", Map.of("type", "number", "description", "Temperatura objetivo en grados Celsius")),
+				tool("get_thermostat_state", "Reads the thermostat's current temperature, target temperature, and mode.", Map.of(), List.of()),
+				tool("set_thermostat_target", "Sets the target temperature in degrees Celsius.",
+						Map.of("temperature", Map.of("type", "number", "description", "Target temperature in degrees Celsius")),
 						List.of("temperature")),
-				tool("set_thermostat_mode", "Cambia el modo de operacion del termostato.",
-						Map.of("mode", Map.of("type", "string", "description", "Modo: OFF, HEATING, COOLING o IDLE")),
+				tool("set_thermostat_mode", "Changes the thermostat's operating mode.",
+						Map.of("mode", Map.of("type", "string", "description", "Mode: OFF, HEATING, COOLING, or IDLE")),
 						List.of("mode")),
 
-				tool("get_home_summary", "Devuelve el estado consolidado de todos los dispositivos del hogar.", Map.of(), List.of()));
+				tool("get_home_summary", "Returns the consolidated state of every device in the home.", Map.of(), List.of()));
 	}
 
 	private FunctionTool tool(String name, String description, Map<String, Object> properties, List<String> required) {

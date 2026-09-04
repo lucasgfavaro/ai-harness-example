@@ -13,8 +13,8 @@ public class OpenApiConfiguration {
 		return new OpenAPI()
 				.info(new Info()
 						.title("Home Assistant API")
-						.description("API para controlar los dispositivos del hogar simulado: " +
-								"luz del jardín, persianas, cerradura inteligente y termostato.")
+						.description("API to control the simulated home devices: " +
+								"garden light, blinds, smart lock, and thermostat.")
 						.version("0.0.1"));
 	}
 }

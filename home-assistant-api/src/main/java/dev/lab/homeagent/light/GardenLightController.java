@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/light")
-@Tag(name = "Luz del jardín", description = "Controla el encendido y apagado de la luz exterior")
+@Tag(name = "Garden Light", description = "Controls turning the outdoor light on and off")
 public class GardenLightController {
 
 	private final GardenLight light;
@@ -19,19 +19,19 @@ public class GardenLightController {
 	}
 
 	@GetMapping
-	@Operation(summary = "Estado actual", description = "Devuelve si la luz está encendida o apagada")
+	@Operation(summary = "Current state", description = "Returns whether the light is on or off")
 	public LightState status() {
 		return light.status();
 	}
 
 	@PostMapping("/on")
-	@Operation(summary = "Encender", description = "Enciende la luz del jardín")
+	@Operation(summary = "Turn on", description = "Turns on the garden light")
 	public LightState turnOn() {
 		return light.turnOn();
 	}
 
 	@PostMapping("/off")
-	@Operation(summary = "Apagar", description = "Apaga la luz del jardín")
+	@Operation(summary = "Turn off", description = "Turns off the garden light")
 	public LightState turnOff() {
 		return light.turnOff();
 	}

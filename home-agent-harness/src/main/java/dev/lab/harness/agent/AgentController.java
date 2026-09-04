@@ -17,7 +17,7 @@ import org.springframework.web.server.ResponseStatusException;
 @RestController
 @RequestMapping("/agent")
 @CrossOrigin(origins = {"http://localhost:4200"})
-@Tag(name = "Agent", description = "Ejecuta el agent loop de la luz del jardín")
+@Tag(name = "Agent", description = "Runs the home agent loop")
 public class AgentController {
 
 	private final AgentService service;
@@ -28,23 +28,23 @@ public class AgentController {
 
 	@PostMapping
 	@Operation(
-			summary = "Pedirle una acción al agente",
-			description = "Con dryRun=true muestra el loop sin OpenAI ni red. Con dryRun=false usa la LLM y las tools HTTP del simulador.")
+			summary = "Ask the agent to perform an action",
+			description = "With dryRun=true it shows the loop without OpenAI or network calls. With dryRun=false it uses the LLM and the simulator's HTTP tools.")
 	@ApiResponses({
-		@ApiResponse(responseCode = "200", description = "El loop terminó con una respuesta final",
+		@ApiResponse(responseCode = "200", description = "The loop finished with a final answer",
 				content = @Content(schema = @Schema(implementation = AgentResult.class))),
-		@ApiResponse(responseCode = "400", description = "Falta el campo request o está vacío", content = @Content),
-		@ApiResponse(responseCode = "500", description = "Falló la LLM, una tool o se alcanzó el límite de turnos", content = @Content)
+		@ApiResponse(responseCode = "400", description = "The request field is missing or blank", content = @Content),
+		@ApiResponse(responseCode = "500", description = "The LLM or a tool failed, or the turn limit was reached", content = @Content)
 	})
 	public AgentResult run(@RequestBody AgentRequest body) {
 		if (body.request() == null || body.request().isBlank()) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "request es obligatorio");
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "request is required");
 		}
 		return service.run(body.request(), body.dryRun());
 	}
 
-	@Schema(name = "AgentRequest", description = "Pedido de una sola ejecución; no se conserva memoria entre requests")
+	@Schema(name = "AgentRequest", description = "A single-run request; no memory is kept between requests")
 	public record AgentRequest(
-			@Schema(description = "Pedido en lenguaje natural", example = "apagá la luz del jardín") String request,
-			@Schema(description = "Simula el loop sin LLM ni llamadas HTTP", example = "true", defaultValue = "true") boolean dryRun) {}
+			@Schema(description = "Request in natural language", example = "turn off the garden light") String request,
+			@Schema(description = "Simulates the loop without an LLM or HTTP calls", example = "true", defaultValue = "true") boolean dryRun) {}
 }

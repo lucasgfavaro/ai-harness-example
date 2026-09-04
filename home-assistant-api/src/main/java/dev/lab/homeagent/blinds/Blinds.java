@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class Blinds {
 
-	// posicion en porcentaje: 0 = cerradas, 100 = abiertas
+	// position in percent: 0 = closed, 100 = open
 	private final AtomicInteger position = new AtomicInteger(0);
 
 	public BlindsState status() {

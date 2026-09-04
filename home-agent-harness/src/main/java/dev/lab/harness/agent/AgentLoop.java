@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Runtime del agente. La lista loopMemory nace y muere dentro de run(): no hay
- * base de datos, conversation id persistido, knowledge base ni memoria global.
+ * Runtime of the agent. The loopMemory list is born and dies inside run(): there is
+ * no database, persisted conversation id, knowledge base, or global memory.
  */
 public final class AgentLoop {
 
@@ -36,7 +36,7 @@ public final class AgentLoop {
 
 			if (turn.toolCalls().isEmpty()) {
 				if (turn.text().isBlank()) {
-					throw new IllegalStateException("El modelo no devolvio texto ni tool calls");
+					throw new IllegalStateException("The model returned neither text nor tool calls");
 				}
 				return new AgentResult(turn.text(), dryRun, steps);
 			}
@@ -49,6 +49,6 @@ public final class AgentLoop {
 			}
 		}
 
-		throw new IllegalStateException("El agent loop supero el limite de " + maxTurns + " turnos");
+		throw new IllegalStateException("The agent loop exceeded the limit of " + maxTurns + " turns");
 	}
 }
